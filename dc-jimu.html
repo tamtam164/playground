@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DC事務効率化ワークフロー図解 - Begin One DX</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700&display=swap');
+        body { font-family: 'Noto Sans JP', sans-serif; background-color: #f1f5f9; }
+        .step-card { transition: all 0.3s ease; }
+        .step-card:hover { transform: translateY(-2px); shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); }
+        .ai-glow { animation: pulse 2s infinite; }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(99, 102, 241, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); }
+        }
+        .status-badge { transition: all 0.5s ease; }
+    </style>
+</head>
+<body class="p-4 md:p-10">
+
+    <div class="max-w-5xl mx-auto">
+        <!-- Header -->
+        <header class="flex justify-between items-end mb-8 border-b border-slate-300 pb-6">
+            <div>
+                <h1 class="text-3xl font-black text-slate-800 tracking-tight">DC事務 DXプロトタイプ構想</h1>
+                <p class="text-slate-500 mt-2 text-lg">Google Workspace × Gemini で実現する「安全・高速」な運用体制</p>
+            </div>
+            <div class="text-right hidden md:block">
+                <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Target Platform</span>
+                <div class="flex gap-3 mt-1 text-slate-600 text-xl">
+                    <i class="fab fa-google-drive"></i>
+                    <i class="fas fa-file-excel"></i>
+                    <i class="fas fa-robot"></i>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            <!-- Workflow Column -->
+            <div class="lg:col-span-7 space-y-6">
+                
+                <!-- Step 1: Input -->
+                <div class="step-card bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                    <div class="flex gap-4">
+                        <div class="bg-blue-600 text-white w-10 h-10 rounded-full flex items-center justify-center font-bold shrink-0">1</div>
+                        <div class="flex-1">
+                            <div class="flex justify-between items-start">
+                                <h3 class="text-xl font-bold text-slate-800">情報の自動集約</h3>
+                                <span class="bg-blue-100 text-blue-700 text-[10px] px-2 py-1 rounded font-bold">IMPORT</span>
+                            </div>
+                            <p class="text-slate-600 text-sm mt-2">各社から届くPDFやメールをAIが読み取り、共通のスプレッドシートへ自動転記します。</p>
+                            
+                            <!-- Demo Input View -->
+                            <div class="mt-4 bg-slate-50 rounded-lg p-3 border border-slate-100">
+                                <div class="flex items-center gap-3 text-xs text-slate-500">
+                                    <div class="bg-white px-2 py-1 rounded shadow-sm border border-slate-200 flex items-center gap-2">
+                                        <i class="fas fa-file-pdf text-red-500"></i> 入社者名簿.pdf
+                                    </div>
+                                    <i class="fas fa-arrow-right text-slate-300"></i>
+                                    <div class="bg-indigo-600 text-white px-3 py-1 rounded-full text-[10px] ai-glow">
+                                        AI抽出中...
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Validation (Interactive) -->
+                <div class="step-card bg-white p-6 rounded-2xl shadow-sm border-2 border-indigo-100 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-indigo-600 text-white text-[10px] px-3 py-1 font-bold">
+                        AI ENGINE
+                    </div>
+                    <div class="flex gap-4">
+                        <div class="bg-indigo-600 text-white w-10 h-10 rounded-full flex items-center justify-center font-bold shrink-0">2</div>
+                        <div class="flex-1">
+                            <h3 class="text-xl font-bold text-slate-800">SBI仕様バリデーション</h3>
+                            <p class="text-slate-600 text-sm mt-2">マニュアル（P.27）の複雑なルールをAIがチェック。半角カナへの自動変換も行います。</p>
+                            
+                            <!-- Interactive Check Demo -->
+                            <div class="mt-4 border border-slate-200 rounded-lg overflow-hidden">
+                                <table class="w-full text-[11px] text-left">
+                                    <thead class="bg-slate-50 text-slate-500 border-b">
+                                        <tr>
+                                            <th class="p-2">氏名(カナ)</th>
+                                            <th class="p-2">基礎年金番号</th>
+                                            <th class="p-2 text-center">判定</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="demo-table">
+                                        <tr>
+                                            <td class="p-2 border-b">トヤマ　アキラ</td>
+                                            <td class="p-2 border-b">1234567890</td>
+                                            <td class="p-2 border-b text-center"><span class="text-slate-300 italic">待機中</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <button onclick="runAiCheck()" class="w-full py-2 bg-indigo-50 text-indigo-700 text-xs font-bold hover:bg-indigo-100 transition-colors">
+                                    <i class="fas fa-wand-magic-sparkles mr-2"></i>AIチェックを実行する
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3: Approval -->
+                <div class="step-card bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                    <div class="flex gap-4">
+                        <div class="bg-emerald-500 text-white w-10 h-10 rounded-full flex items-center justify-center font-bold shrink-0">3</div>
+                        <div class="flex-1">
+                            <h3 class="text-xl font-bold text-slate-800">承認・フォーアイズチェック</h3>
+                            <p class="text-slate-600 text-sm mt-2">春名様の作業完了後、富山様へ通知。修正箇所がハイライトされ、一目で確認可能です。</p>
+                            
+                            <div class="mt-4 flex gap-2">
+                                <div class="flex-1 bg-slate-50 p-3 rounded-lg flex items-center justify-between">
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center text-[10px] text-blue-600 font-bold">春</div>
+                                        <span class="text-[10px] text-slate-500">作成完了</span>
+                                    </div>
+                                    <i class="fas fa-chevron-right text-slate-300 text-xs"></i>
+                                    <div id="approval-status" class="bg-slate-200 text-slate-500 text-[10px] px-2 py-1 rounded font-bold">
+                                        承認待ち
+                                    </div>
+                                </div>
+                                <button onclick="approve()" class="bg-emerald-500 text-white px-4 rounded-lg text-xs font-bold hover:bg-emerald-600 transition-colors">
+                                    承認
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Dashboard / Benefits Column -->
+            <div class="lg:col-span-5 space-y-6">
+                
+                <!-- Status Dashboard Card -->
+                <div class="bg-slate-800 rounded-3xl p-6 text-white shadow-xl">
+                    <h3 class="font-bold mb-4 flex items-center gap-2 text-slate-300">
+                        <i class="fas fa-chart-pie"></i> 期待される導入効果
+                    </h3>
+                    <div class="space-y-6">
+                        <div>
+                            <div class="flex justify-between text-xs mb-1">
+                                <span>事務処理時間（月間合計）</span>
+                                <span class="text-emerald-400 font-bold">75% 削減</span>
+                            </div>
+                            <div class="w-full bg-slate-700 h-2 rounded-full overflow-hidden">
+                                <div class="bg-emerald-400 h-full w-[25%]"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-xs mb-1">
+                                <span>不備による差し戻し率</span>
+                                <span class="text-emerald-400 font-bold">ほぼ 0%</span>
+                            </div>
+                            <div class="w-full bg-slate-700 h-2 rounded-full overflow-hidden">
+                                <div class="bg-emerald-400 h-full w-[5%]"></div>
+                            </div>
+                        </div>
+                        <div class="bg-slate-700/50 p-4 rounded-xl mt-4 border border-slate-700 text-xs leading-relaxed">
+                            <p class="text-slate-400 font-bold mb-1 italic">春名様のコメントイメージ：</p>
+                            「リモートでも常に富山さんと繋がっている安心感があり、AIが自動で形式チェックしてくれるので、本来の確認業務に集中できます。」
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SBI Spec Compliance -->
+                <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200">
+                    <h3 class="font-bold text-slate-800 mb-4 flex items-center gap-2">
+                        <i class="fas fa-check-double text-blue-500"></i> SBIマニュアル準拠項目
+                    </h3>
+                    <ul class="text-xs space-y-3">
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-circle-check text-emerald-500 mt-0.5"></i>
+                            <div>
+                                <span class="font-bold block">半角カナ変換の自動化</span>
+                                <span class="text-slate-500">マニュアルP.27の規定通り、姓名の間を半角スペースで繋ぐ処理を自動化。</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-circle-check text-emerald-500 mt-0.5"></i>
+                            <div>
+                                <span class="font-bold block">基礎年金番号の自動検証</span>
+                                <span class="text-slate-500">10桁のバリデーションを瞬時に実行し、入力漏れを防ぐ。</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-circle-check text-emerald-500 mt-0.5"></i>
+                            <div>
+                                <span class="font-bold block">拠出限度額の自動判定</span>
+                                <span class="text-slate-500">他の年金制度（DBなど）との併用状況に応じた上限額をAIが参照。</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Footer Action -->
+        <footer class="mt-12 text-center bg-white p-6 rounded-2xl border border-dashed border-slate-300">
+            <p class="text-slate-500 text-sm mb-4">このワークフローに基づいたスプレッドシートの試作を開始できます。</p>
+            <button class="bg-slate-800 text-white px-8 py-3 rounded-full font-bold hover:bg-slate-900 transition-all shadow-lg text-sm">
+                プロジェクトを開始する
+            </button>
+        </footer>
+    </div>
+
+    <script>
+        function runAiCheck() {
+            const table = document.getElementById('demo-table');
+            table.innerHTML = `
+                <tr class="animate-pulse bg-indigo-50">
+                    <td class="p-2 border-b font-bold text-indigo-600">ﾄﾔﾏ ｱｷﾗ</td>
+                    <td class="p-2 border-b">1234567890</td>
+                    <td class="p-2 border-b text-center"><i class="fas fa-spinner fa-spin text-indigo-500"></i></td>
+                </tr>
+            `;
+            
+            setTimeout(() => {
+                table.innerHTML = `
+                    <tr class="bg-green-50 transition-all duration-500">
+                        <td class="p-2 border-b font-bold text-slate-800">ﾄﾔﾏ ｱｷﾗ</td>
+                        <td class="p-2 border-b text-slate-800">1234567890</td>
+                        <td class="p-2 border-b text-center text-emerald-500">
+                            <i class="fas fa-check-circle"></i> OK
+                        </td>
+                    </tr>
+                `;
+            }, 1500);
+        }
+
+        function approve() {
+            const status = document.getElementById('approval-status');
+            status.innerHTML = '<i class="fas fa-check mr-1"></i> 承認済み';
+            status.className = "bg-emerald-500 text-white text-[10px] px-2 py-1 rounded font-bold shadow-sm status-badge";
+        }
+    </script>
+</body>
+</html>
